@@ -1,0 +1,41 @@
+with "config/stm32_devices_config.gpr";
+with "config/stm32_svd_config.gpr";
+with "config/cortex_m_config.gpr";
+project Stm32_Devices is
+
+   for Target use "arm-eabi";
+   --for Runtime ("Ada") use "light-cortex-" & Cortex_M_Config.core;
+   for Runtime ("Ada") use "light-tasking-stm32f746disco";
+
+   for Library_Name use "Stm32_Devices";
+   for Library_Version use Project'Library_Name & ".so." & Stm32_Devices_Config.Crate_Version;
+
+   Src_Dirs := ();
+   case stm32_svd_config.DEVICE is
+      when "stm32f746" =>
+         Src_Dirs := Src_Dirs & ("src/stm32f746");
+   end case;
+
+   for Source_Dirs use ("src/", "config/") & Src_Dirs;
+   for Object_Dir use "obj/" & Stm32_Devices_Config.Build_Profile;
+   for Create_Missing_Dirs use "True";
+   for Library_Dir use "lib";
+
+   type Library_Type_Type is ("relocatable", "static", "static-pic");
+   Library_Type : Library_Type_Type :=
+     external ("STM32_DEVICES_LIBRARY_TYPE", external ("LIBRARY_TYPE", "static"));
+   for Library_Kind use Library_Type;
+
+   package Compiler is
+      for Default_Switches ("Ada") use Stm32_Devices_Config.Ada_Compiler_Switches;
+   end Compiler;
+
+   package Binder is
+      for Switches ("Ada") use ("-Es"); --  Symbolic traceback
+   end Binder;
+
+   package Install is
+      for Artifacts (".") use ("share");
+   end Install;
+
+end Stm32_Devices;
