@@ -775,7 +775,7 @@ package body STM32.Device is
    -- System_Clock_Frequencies --
    ------------------------------
 
-   procedure Set_High_Speed_External_Clock (Frequency : in out UInt32) is
+   procedure Set_High_Speed_External_Clock (Frequency : UInt32) is
    begin
       HSE_VALUE := Frequency;
    end Set_High_Speed_External_Clock;

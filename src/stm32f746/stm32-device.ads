@@ -68,12 +68,6 @@ package STM32.Device is
    --  Raised by the routines below for a device passed as an actual parameter
    --  when that device is not present on the given hardware instance.
 
-   --  HSI_VALUE      : constant := 16_000_000;
-   --  Internal oscillator in Hz
-
-   --  HSE_VALUE      : constant UInt32;
-   --  External oscillator in Hz
-
    procedure Enable_Clock (This : aliased in out GPIO_Port)
      with Inline;
    procedure Enable_Clock (Point : GPIO_Point)
@@ -570,7 +564,7 @@ package STM32.Device is
       I2SCLK  : UInt32;
    end record;
 
-   procedure Set_High_Speed_External_Clock (Frequency : in out UInt32);
+   procedure Set_High_Speed_External_Clock (Frequency : UInt32);
 
 
    function System_Clock_Frequencies return RCC_System_Clocks;
